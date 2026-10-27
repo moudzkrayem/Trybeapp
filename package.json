@@ -4,12 +4,12 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moudzkrayem/usetrybe.git"
+    "url": "git+https://github.com/moudzkrayem/Trybeapp.git"
   },
   "bugs": {
-    "url": "https://github.com/moudzkrayem/usetrybe/issues"
+    "url": "https://github.com/moudzkrayem/Trybeapp/issues"
   },
-  "homepage": "https://github.com/moudzkrayem/usetrybe#readme",
+  "homepage": "https://github.com/moudzkrayem/Trybeapp#readme",
   "scripts": {
     "dev": "next dev -p 3000",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
