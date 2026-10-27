@@ -1,0 +1,90 @@
+
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the Trybe application.",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "bio": { "type": "string" },
+        "profilePictureUrl": { "type": "string", "format": "uri" },
+        "age": { "type": "string" },
+        "location": { "type": "string" },
+        "galleryImageUrls": { "type": "array", "items": { "type": "string", "format": "uri" } },
+        "interests": { "type": "array", "items": { "type": "string" } },
+        "passes": { "type": "number", "description": "Current available passes." },
+        "lastPassReset": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "username", "email", "displayName"]
+    },
+    "Event": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Event",
+      "type": "object",
+      "description": "Represents an event.",
+      "properties": {
+        "id": { "type": "string" },
+        "organizerId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "location": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "eventPictureUrl": { "type": "string", "format": "uri" },
+        "category": { "type": "string" },
+        "capacity": { "type": "number" },
+        "price": { "type": "number", "default": 0 },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "isPromoted": { "type": "boolean" },
+        "rsvpCount": { "type": "number", "default": 0 }
+      },
+      "required": ["id", "organizerId", "title", "description", "location", "startTime", "endTime", "category"]
+    },
+    "Rsvp": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Rsvp",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "eventId": { "type": "string" },
+        "userId": { "type": "string" },
+        "rsvpTime": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["going", "maybe", "not going"] }
+      },
+      "required": ["id", "eventId", "userId", "rsvpTime", "status"]
+    },
+    "Message": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "eventId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderPhoto": { "type": "string" },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "eventId", "senderId", "content", "timestamp"]
+    }
+  },
+  "auth": {
+    "providers": ["password", "anonymous", "google.com"]
+  },
+  "firestore": {
+    "structure": [
+      { "path": "/users/{userId}", "definition": { "entityName": "User", "schema": { "$ref": "#/backend/entities/User" }, "description": "User profiles." } },
+      { "path": "/events/{eventId}", "definition": { "entityName": "Event", "schema": { "$ref": "#/backend/entities/Event" }, "description": "All events." } },
+      { "path": "/events/{eventId}/rsvps/{rsvpId}", "definition": { "entityName": "Rsvp", "schema": { "$ref": "#/backend/entities/Rsvp" }, "description": "RSVPs for an event." } },
+      { "path": "/events/{eventId}/messages/{messageId}", "definition": { "entityName": "Message", "schema": { "$ref": "#/backend/entities/Message" }, "description": "Chat messages." } }
+    ]
+  }
+}

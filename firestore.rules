@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userOwns(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // User profiles: readable publicly or by authenticated users, editable only by profile owner
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if signedIn() && request.auth.uid == userId;
+      allow update: if userOwns(userId);
+      allow delete: if false;
+    }
+
+    // Trybes collection: public read for discovery, host can edit/delete, authenticated can create
+    match /trybes/{trybeId} {
+      allow read: if true;
+      allow create: if signedIn();
+      allow update: if signedIn() && (
+        resource.data.hostId == request.auth.uid || 
+        resource.data.organizerId == request.auth.uid ||
+        // Allow members to join/leave by updating attendeeIds/attendeesCount
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['attendeeIds', 'attendeesCount', 'rsvpCount'])
+      );
+      allow delete: if signedIn() && (resource.data.hostId == request.auth.uid || resource.data.organizerId == request.auth.uid);
+
+      match /attendees/{userId} {
+        allow read: if true;
+        allow create: if signedIn() && request.auth.uid == userId;
+        allow update: if signedIn() && request.auth.uid == userId;
+        allow delete: if signedIn() && request.auth.uid == userId;
+      }
+
+      match /messages/{messageId} {
+        allow read: if signedIn();
+        allow create: if signedIn()
+          && request.resource.data.senderId == request.auth.uid;
+        allow update: if false;
+        allow delete: if signedIn() && resource.data.senderId == request.auth.uid;
+      }
+    }
+
+    // Events collection (legacy & active alias in UI): public read, organizer can edit/delete
+    match /events/{eventId} {
+      allow read: if true;
+      allow create: if signedIn();
+      allow update: if signedIn() && (
+        resource.data.organizerId == request.auth.uid || 
+        resource.data.hostId == request.auth.uid ||
+        // Allow updating rsvpCount or pass counts
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rsvpCount', 'attendeesCount', 'attendeeIds'])
+      );
+      allow delete: if signedIn() && (resource.data.organizerId == request.auth.uid || resource.data.hostId == request.auth.uid);
+
+      match /rsvps/{rsvpId} {
+        allow read: if true;
+        allow create: if signedIn() && (request.resource.data.userId == request.auth.uid || request.auth.uid != null);
+        allow update: if signedIn() && (resource.data.userId == request.auth.uid || request.auth.uid != null);
+        allow delete: if signedIn() && (resource.data.userId == request.auth.uid || request.auth.uid != null);
+      }
+
+      match /messages/{messageId} {
+        allow read: if signedIn();
+        allow create: if signedIn()
+          && request.resource.data.senderId == request.auth.uid;
+        allow update: if false;
+        allow delete: if signedIn() && resource.data.senderId == request.auth.uid;
+      }
+    }
+  }
+}

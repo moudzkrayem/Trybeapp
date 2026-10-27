@@ -1,0 +1,5 @@
+{
+  "name": "studio-586593360",
+  "description": "Trybe - Vibrant social event app for discovering, joining, and leading local communities",
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

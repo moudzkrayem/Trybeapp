@@ -1,0 +1,60 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "trybes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "hostId", "order": "ASCENDING" },
+        { "fieldPath": "dateTime", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "trybes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "attendeeIds", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "dateTime", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "trybes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isPromoted", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "trybes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "organizerId", "order": "ASCENDING" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isPromoted", "order": "ASCENDING" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
