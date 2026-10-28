@@ -8,7 +8,7 @@ function resolveAuthDomain(): string {
       return 'usetrybe.com';
     }
   }
-  return 'usetrybe.com';
+  return 'studio-586593360-b85c9.firebaseapp.com';
 }
 
 export const firebaseConfig = {
